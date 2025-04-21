@@ -1,0 +1,25 @@
+networks:
+  order-accumulator_network:
+
+services:
+  order-generator-web-react:
+    build:
+      context: ./Front/order-generator/
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    depends_on:
+      - order-accumulator-api
+    networks:
+      - order-accumulator_network
+
+  order-accumulator-api:
+    build:
+      context: ./Back
+      dockerfile: OrderAccumulator.Api/OrderAccumulator.Api/Dockerfile
+    ports:
+      - "5000:80" 
+    networks:
+      - order-accumulator_network
+    environment:
+      - ASPNETCORE_URLS=http://+:80  

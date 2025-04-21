@@ -1,0 +1,49 @@
+.ant-radio-button-wrapper.custom-radio-button {
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.ant-radio-button-wrapper.custom-radio-button.ant-radio-button-wrapper-checked {
+  background-color: #2f3a2f;
+  border-color: #2f3a2f;
+}
+
+.ant-radio-button-wrapper.custom-radio-button[value="V"].ant-radio-button-wrapper-checked {
+  background-color: #3a2f2f;
+  border-color: #3a2f2f;
+}
+
+/* Cores do texto */
+.ant-radio-button-wrapper.custom-radio-button[value="C"] {
+  color: #52c41a;
+}
+
+.ant-radio-button-wrapper.custom-radio-button[value="V"] {
+  color: #f5222d;
+}
+
+/* Efeitos hover */
+.ant-radio-button-wrapper.custom-radio-button:hover {
+  background-color: #f3f4eb !important;
+  border-color: none;
+}
+
+.ant-radio-button-wrapper.custom-radio-button[value="C"]:hover:not(.ant-radio-button-wrapper-checked) {
+  color: #52c41a !important;
+}
+
+.ant-radio-button-wrapper.custom-radio-button[value="V"]:hover:not(.ant-radio-button-wrapper-checked) {
+  color: #f5222d !important;
+}
+
+.ant-radio-button-wrapper.custom-radio-button.ant-radio-button-wrapper-checked:hover {
+  background-color: #2f3a2f !important;
+}
+
+.table-row-success {
+    background-color: rgba(82, 196, 26, 0.1) !important;
+}
+
+.table-row-error {
+    background-color: rgba(245, 34, 45, 0.1) !important;
+}
