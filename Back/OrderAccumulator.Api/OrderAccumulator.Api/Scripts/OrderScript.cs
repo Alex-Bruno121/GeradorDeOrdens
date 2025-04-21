@@ -42,6 +42,7 @@
                 PRECO as Preco,
                 EXPOSICAO_ATUAL as ExposicaoAtual,
                 ORDEM_STATUS as OrdemStatus,
+                MOTIVO as Motivo,
             	DATA_CRIACAO as DataCriacao
             FROM 
                 ORDERS
@@ -51,12 +52,13 @@
         public string BuscaUltimaExposicaoPorAtivo = @"
             SELECT TOP 1 EXPOSICAO_ATUAL as ExposicaoAtual 
             FROM ORDERS 
-            WHERE ATIVO = @ATIVO 
+            WHERE ATIVO = @ATIVO AND ORDEM_STATUS = 1
             ORDER BY DATA_CRIACAO DESC";
 
         public string InserirOrdem = @"
-            INSERT INTO ORDERS (ATIVO, LADO, QUANTIDADE, PRECO, EXPOSICAO_ATUAL, ORDEM_STATUS)
-            VALUES (@ATIVO, @LADO, @QUANTIDADE, @PRECO, @EXPOSICAO_ATUAL, @ORDEM_STATUS);
-            SELECT CAST(SCOPE_IDENTITY() as int);";
+            INSERT INTO ORDERS (ATIVO, LADO, QUANTIDADE, PRECO, EXPOSICAO_ATUAL, ORDEM_STATUS, MOTIVO)
+            VALUES (@ATIVO, @LADO, @QUANTIDADE, @PRECO, @EXPOSICAO_ATUAL, @ORDEM_STATUS, @MOTIVO)";
+
+        public string LimpaTabela = @"DELETE FROM ORDERS"; 
     }
 }

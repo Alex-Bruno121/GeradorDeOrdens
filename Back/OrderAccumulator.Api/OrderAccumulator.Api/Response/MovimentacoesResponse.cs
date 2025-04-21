@@ -24,5 +24,8 @@ namespace OrderAccumulator.Api.Responses
 
         [JsonPropertyName("status")]
         public int OrdemStatus { get; set; } // 0 - rejeitado | 1 - aceito
+        
+        [JsonPropertyName("motivo")]
+        public string? Motivo { get; set; } // 0 - rejeitado | 1 - aceito
     }
 }

@@ -8,5 +8,6 @@ namespace OrderAccumulator.Api.Services.Interfaces
         Task<OrderResponse> ProcessarOrdemAsync(OrderModels order);
         Task<IEnumerable<MovimentacoesResponse>> ObterTodasOrdensAsync();
         Task<IEnumerable<MovimentacoesResponse>> ObterUltimasOrdensPorAtivoAsync();
+        Task LimpaHistoricoAsync();
     }
 }

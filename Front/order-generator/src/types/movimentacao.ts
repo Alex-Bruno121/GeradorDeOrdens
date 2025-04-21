@@ -6,6 +6,7 @@ export interface Movimentacao {
   exposicao_atual: number;
   data_criacao: string;
   status: number;
+  motivo: string | null;
 }
 
 export interface MovimentacaoResponse {

@@ -32,9 +32,19 @@ namespace OrderAccumulator.Api.Services
                 decimal exposicaoAtual = await _orderRepository.BuscaUltimaExposicaoPorAtivoAsync(order);
                 decimal novaExposicao = exposicaoAtual + (order.Lado == 'C' ? valorOrdem : -valorOrdem);
 
+                if ((exposicaoAtual == 0 && order.Lado == 'V') || (valorOrdem > exposicaoAtual && order.Lado == 'V'))
+                {
+                    await inserirOrdens(order, novaExposicao, 0, "Saldo de ativos insuficiente");
+                    return new OrderResponse
+                    {
+                        Sucesso = false,
+                        Msg_Erro = $"Ordem rejeitada - Não é possível realizar uma operação de venda menor que o saldo da sua carteira: R$ {exposicaoAtual:N2}"
+                    };
+                }
+
                 if (Math.Abs(novaExposicao) > LimiteExposicao)
                 {
-                    int rs = await _orderRepository.InserirOrdemAsync(order, novaExposicao, 0);
+                    await inserirOrdens(order, novaExposicao, 0, "Limite de exposição maior que 1.000.000,00");
                     return new OrderResponse
                     {
                         Sucesso = false,
@@ -42,7 +52,7 @@ namespace OrderAccumulator.Api.Services
                     };
                 }
 
-                int id = await _orderRepository.InserirOrdemAsync(order, novaExposicao, 1);
+                await inserirOrdens(order, novaExposicao, 1);
 
                 return new OrderResponse
                 {
@@ -60,6 +70,12 @@ namespace OrderAccumulator.Api.Services
             }
         }
 
+        public async Task inserirOrdens(OrderModels order, decimal exposicao = 0, int status = 0, string motivo = null)
+        {
+            int qtdIsert = await _orderRepository.InserirOrdemAsync(order, exposicao, status, motivo);
+            if (qtdIsert == 0) throw new ArgumentException("Houve um erro ao processar a ordem");
+        }
+
         public async Task<IEnumerable<MovimentacoesResponse>> ObterTodasOrdensAsync()
         {
             return await _orderRepository.ObterTodasOrdensAsync();
@@ -68,6 +84,11 @@ namespace OrderAccumulator.Api.Services
         public async Task<IEnumerable<MovimentacoesResponse>> ObterUltimasOrdensPorAtivoAsync()
         {
             return await _orderRepository.ObterUltimasOrdensPorAtivoAsync();
+        }
+
+        public async Task LimpaHistoricoAsync()
+        {
+            await _orderRepository.LimpaHistoricoAsync();
         }
     }
 }

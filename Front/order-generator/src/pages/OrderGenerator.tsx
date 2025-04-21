@@ -19,29 +19,32 @@ const OrderGenerator: React.FC = () => {
   const fetchExposicoes = async () => {
     try {
       const response = await fetch(`${base_url}/Order/busca/ultimas-movimentacoes`);
-      const data = await response.json();
-      
-      const formattedData = data.map((item: Movimentacao) => ({
+
+      if (response.status == 204) {
+        setMovimentacao([]);
+      } else {
+        const data = await response.json();
+        const formattedData = data.map((item: Movimentacao) => ({
           ...item,
           preco: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(item.preco),
-        exposicao_atual: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: 'BRL'
-        }).format(item.exposicao_atual),
-        data_criacao: new Date(item.data_criacao).toLocaleString('pt-BR', {
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        })
-      }));
-
-      setMovimentacao(formattedData);
+            style: 'currency',
+            currency: 'BRL'
+          }).format(item.preco),
+          exposicao_atual: new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+          }).format(item.exposicao_atual),
+          data_criacao: new Date(item.data_criacao).toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+          })
+        }));
+        setMovimentacao(formattedData);
+      }
     } catch (error) {
       messageApi.error({
         content: 'Erro ao carregar exposições',
@@ -182,7 +185,12 @@ const OrderGenerator: React.FC = () => {
             style={{ width: '100%' }}
             placeholder="0.01"
             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+            // parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
+            parser={(value) => {
+              if (!value) return 0;
+              // Primeiro substitui vírgula por ponto, depois remove $ e espaços
+              return value.replace(',', '.').replace(/\$\s?|(,*)/g, '') as unknown as number;
+            }}
             addonBefore="$"
           />
         </Form.Item>
@@ -202,11 +210,11 @@ const OrderGenerator: React.FC = () => {
         </Form.Item>
       </Form>
       {movimentacao.length > 0 && (
-            <MovimentacaoCard 
-                movimentacao={movimentacao} 
-                onDelete={fetchExposicoes}
-            />
-        )}
+        <MovimentacaoCard
+          movimentacao={movimentacao}
+          onDelete={fetchExposicoes}
+        />
+      )}
     </Card>
   );
 };

@@ -26,7 +26,7 @@ namespace OrderAccumulator.Api.Repositories
             return await _dbConnection.QueryFirstOrDefaultAsync<decimal>(_orderScript.BuscaUltimaExposicaoPorAtivo, d);
         }
 
-        public async Task<int> InserirOrdemAsync(OrderModels order, decimal exposicaoAtual = 0, int status = 0)
+        public async Task<int> InserirOrdemAsync(OrderModels order, decimal exposicaoAtual = 0, int status = 0, string motivo = null)
         {
             DynamicParameters d = new DynamicParameters();
             d.Add("ATIVO", order.Ativo);
@@ -35,8 +35,14 @@ namespace OrderAccumulator.Api.Repositories
             d.Add("PRECO", order.Preco);
             d.Add("EXPOSICAO_ATUAL", exposicaoAtual);
             d.Add("ORDEM_STATUS", status);
+            d.Add("MOTIVO", motivo);
 
-            return await _dbConnection.ExecuteScalarAsync<int>(_orderScript.InserirOrdem, d);
+            return await _dbConnection.ExecuteAsync(_orderScript.InserirOrdem, d);
+        }
+
+        public async Task LimpaHistoricoAsync()
+        {
+            await _dbConnection.ExecuteAsync(_orderScript.LimpaTabela);
         }
 
         public async Task<IEnumerable<MovimentacoesResponse>> ObterTodasOrdensAsync()

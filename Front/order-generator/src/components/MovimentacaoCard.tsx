@@ -80,20 +80,22 @@ const MovimentacaoCard: React.FC<MovimentacaoCardProps> = ({ movimentacao, onDel
             dataIndex: 'data_criacao',
             key: 'data_criacao',
         },
+        {
+            title: 'Motivo Rejeição',
+            dataIndex: 'motivo',
+            key: 'motivo',
+        },
     ];
 
     const handleDelete = async () => {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_TODO}/Order/deletar-exposicoes`, {
+            const response = await fetch(`${import.meta.env.VITE_API_TODO}/Order/limpa-historico`, {
                 method: 'DELETE',
             });
-
-            if (response.ok) {
+            if (response.status == 204) {
                 message.success('Movimentações deletadas com sucesso');
                 onDelete();
-            } else {
-                message.error('Erro ao deletar movimentações');
-            }
+            } 
         } catch (error) {
             message.error('Erro ao conectar com o servidor');
         }
@@ -103,20 +105,22 @@ const MovimentacaoCard: React.FC<MovimentacaoCardProps> = ({ movimentacao, onDel
         setLoadingHistorico(true);
         try {
             const response = await fetch(`${import.meta.env.VITE_API_TODO}/Order/busca/historicos-movimentacoes`);
-            const data = await response.json();
 
-            const formattedData = data.map((item: Movimentacao) => ({
-                ...item,
-                preco: new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                }).format(item.preco),
-                data_criacao: new Date(item.data_criacao).toLocaleString('pt-BR'),
-                statusText: item.status === 0 ? 'REJEITADO' : 'PROCESSADO',
-            }));
-
-            setHistoricoMovimentacoes(formattedData);
-            setIsModalVisible(true);
+            if (response.status == 200) {
+                const data = await response.json();
+                const formattedData = data.map((item: Movimentacao) => ({
+                    ...item,
+                    preco: new Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }).format(item.preco),
+                    data_criacao: new Date(item.data_criacao).toLocaleString('pt-BR'),
+                    statusText: item.status === 0 ? 'REJEITADO' : 'PROCESSADO',
+                }));
+    
+                setHistoricoMovimentacoes(formattedData);
+                setIsModalVisible(true);
+            }
         } catch (error) {
             message.error('Erro ao carregar histórico de movimentações');
         } finally {
@@ -135,8 +139,8 @@ const MovimentacaoCard: React.FC<MovimentacaoCardProps> = ({ movimentacao, onDel
 
     const deletarButton = (
         <Popconfirm
-            title="Deletar exposições"
-            description="Tem certeza que deseja deletar todas as exposições?"
+            title="Limpar tabela (Isso só acontece pois é um ambiente de aprendizado)"
+            description="Tem certeza que deseja deletar todas as movimentações?"
             onConfirm={handleDelete}
             okText="Sim"
             cancelText="Não"
