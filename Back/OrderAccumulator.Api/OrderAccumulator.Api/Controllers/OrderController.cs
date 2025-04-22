@@ -58,7 +58,7 @@ namespace OrderAccumulator.Api.Controllers
         }
 
         /// <summary>
-        /// Limpa a tabela de historico de ordens para reprocessamento
+        /// Limpa a tabela de historico de ordens para reprocessamento (apenas para novos testes)
         /// </summary>
         /// <response code="204">Retorna noContent (204)</response>
         [HttpDelete("limpa-historico")]
