@@ -1,0 +1,48 @@
+[
+  {
+    "ContainingType": "OrderAccumulator.Api.Controllers.OrderController",
+    "Method": "ObterTodasOrdens",
+    "RelativePath": "Order/busca/historicos-movimentacoes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OrderAccumulator.Api.Controllers.OrderController",
+    "Method": "ObterUltimasOrdensPorAtivo",
+    "RelativePath": "Order/busca/ultimas-movimentacoes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OrderAccumulator.Api.Controllers.OrderController",
+    "Method": "LimpaHistorico",
+    "RelativePath": "Order/limpa-historico",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OrderAccumulator.Api.Controllers.OrderController",
+    "Method": "ProcessarOrdem",
+    "RelativePath": "Order/processar/ordem-ativo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "order",
+        "Type": "OrderAccumulator.Api.Models.OrderModels",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

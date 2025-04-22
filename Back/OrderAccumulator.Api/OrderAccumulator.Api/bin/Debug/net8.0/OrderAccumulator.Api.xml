@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OrderAccumulator.Api</name>
+    </assembly>
+    <members>
+        <member name="M:OrderAccumulator.Api.Controllers.OrderController.ProcessarOrdem(OrderAccumulator.Api.Models.OrderModels)">
+            <summary>
+            Processa ordens de compra e venda de ativos
+            </summary>
+            <param name="order">Dados da ordem (ativo, lado, quantidade, preço)</param>
+            <returns>Resultado do processamento com exposição atual</returns>
+            <response code="200">Retorna um objeto json (sucesso, exposicao_atual e msg_erro)</response>
+        </member>
+        <member name="M:OrderAccumulator.Api.Controllers.OrderController.ObterTodasOrdens">
+            <summary>
+            Resgata todo o historico de ordens de compra e venda de ativos
+            </summary>
+            <returns>Retorna uma lista de movimentações</returns>
+            <response code="200">Retorna uma lista de movimentações (MovimentacoesResponse)</response>
+        </member>
+        <member name="M:OrderAccumulator.Api.Controllers.OrderController.ObterUltimasOrdensPorAtivo">
+            <summary>
+            Resgata as ultimas ordens de compra e venda por ativos
+            </summary>
+            <returns>Retorna uma lista das ultimas movimentações por ativos</returns>
+            <response code="200">Retorna uma lista das ultimas movimentações por ativos (MovimentacoesResponse)</response>
+        </member>
+        <member name="M:OrderAccumulator.Api.Controllers.OrderController.LimpaHistorico">
+            <summary>
+            Limpa a tabela de historico de ordens para reprocessamento
+            </summary>
+            <response code="204">Retorna noContent (204)</response>
+        </member>
+    </members>
+</doc>
