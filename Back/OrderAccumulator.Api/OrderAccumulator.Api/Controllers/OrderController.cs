@@ -24,12 +24,7 @@ namespace OrderAccumulator.Api.Controllers
         [HttpPost("processar/ordem-ativo")]
         public async Task<IActionResult> ProcessarOrdem([FromBody] OrderModels order)
         {
-            var response = await _orderDbService.ProcessarOrdemAsync(order);
-
-            if (response.Sucesso)
-                return Ok(response);
-            else
-                return BadRequest(response);
+            return Ok(await _orderDbService.ProcessarOrdemAsync(order));
         }
 
         /// <summary>

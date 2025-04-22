@@ -19,14 +19,13 @@ namespace OrderAccumulator.Api.Services
         {
             try
             {
-                if (order.Quantidade <= 0 || order.Preco <= 0)
-                {
-                    return new OrderResponse
-                    {
-                        Sucesso = false,
-                        Msg_Erro = "Quantidade e preço devem ser maiores que zero"
-                    };
-                }
+                if (order == null) return new OrderResponse { Sucesso = false, Msg_Erro = "Ordem não pode ser nula" };
+
+                if (string.IsNullOrWhiteSpace(order.Ativo)) return new OrderResponse { Sucesso = false, Msg_Erro = "Ativo não pode ser vazio" };
+
+                if (order.Lado != 'C' && order.Lado != 'V') return new OrderResponse { Sucesso = false, Msg_Erro = "Lado da ordem deve ser 'C' para compra ou 'V' para venda" };
+
+                if (order.Quantidade <= 0 || order.Preco <= 0) return new OrderResponse { Sucesso = false, Msg_Erro = "Quantidade e preço devem ser maiores que zero" };
 
                 decimal valorOrdem = order.Preco * order.Quantidade;
                 decimal exposicaoAtual = await _orderRepository.BuscaUltimaExposicaoPorAtivoAsync(order);
@@ -34,25 +33,27 @@ namespace OrderAccumulator.Api.Services
 
                 if ((exposicaoAtual == 0 && order.Lado == 'V') || (valorOrdem > exposicaoAtual && order.Lado == 'V'))
                 {
-                    await inserirOrdens(order, novaExposicao, 0, "Saldo de ativos insuficiente");
+                    await _orderRepository.InserirOrdemAsync(order, exposicaoAtual, 0, "Saldo de ativos insuficiente");
                     return new OrderResponse
                     {
                         Sucesso = false,
-                        Msg_Erro = $"Ordem rejeitada - Não é possível realizar uma operação de venda menor que o saldo da sua carteira: R$ {exposicaoAtual:N2}"
+                        Exposicao_Atual = exposicaoAtual,
+                        Msg_Erro = $"Ordem rejeitada - Não é possível realizar uma operação de venda para um ativo de saldo insuficiente"
                     };
                 }
 
                 if (Math.Abs(novaExposicao) > LimiteExposicao)
                 {
-                    await inserirOrdens(order, novaExposicao, 0, "Limite de exposição maior que 1.000.000,00");
+                    await _orderRepository.InserirOrdemAsync(order, exposicaoAtual, 0, "Limite de exposição maior que 1.000.000,00");
                     return new OrderResponse
                     {
                         Sucesso = false,
+                        Exposicao_Atual = exposicaoAtual,
                         Msg_Erro = $"Ordem rejeitada - A soma dos ativos ultrapassaria o limite de R$ {LimiteExposicao:N2}"
                     };
                 }
 
-                await inserirOrdens(order, novaExposicao, 1);
+                await _orderRepository.InserirOrdemAsync(order, novaExposicao, 1);
 
                 return new OrderResponse
                 {
@@ -68,12 +69,6 @@ namespace OrderAccumulator.Api.Services
                     Msg_Erro = $"Erro ao processar ordem: {ex.Message}"
                 };
             }
-        }
-
-        public async Task inserirOrdens(OrderModels order, decimal exposicao = 0, int status = 0, string motivo = null)
-        {
-            int qtdIsert = await _orderRepository.InserirOrdemAsync(order, exposicao, status, motivo);
-            if (qtdIsert == 0) throw new ArgumentException("Houve um erro ao processar a ordem");
         }
 
         public async Task<IEnumerable<MovimentacoesResponse>> ObterTodasOrdensAsync()

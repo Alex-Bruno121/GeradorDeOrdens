@@ -36,6 +36,7 @@ namespace OrderAccumulator.Api.Repositories
             d.Add("EXPOSICAO_ATUAL", exposicaoAtual);
             d.Add("ORDEM_STATUS", status);
             d.Add("MOTIVO", motivo);
+            d.Add("DATA", DateTime.Now);
 
             return await _dbConnection.ExecuteAsync(_orderScript.InserirOrdem, d);
         }

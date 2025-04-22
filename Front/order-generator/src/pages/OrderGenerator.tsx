@@ -8,23 +8,22 @@ import { orderValidators } from '../utils/validators';
 
 const { Option } = Select;
 const base_url = import.meta.env.VITE_API_TODO;
-const assetOptions = ['PETR4', 'VALE3', 'VIIA4'];
+const ativoOptions = ['PETR4', 'VALE3', 'VIIA4'];
 
 const OrderGenerator: React.FC = () => {
   const [form] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
   const [movimentacao, setMovimentacao] = useState<Movimentacao[]>([]);
 
   const fetchExposicoes = async () => {
     try {
+      
       const response = await fetch(`${base_url}/Order/busca/ultimas-movimentacoes`);
-
       if (response.status == 204) {
         setMovimentacao([]);
-      } else {
+      } else if (response.status == 200) {
         const data = await response.json();
-        const formattedData = data.map((item: Movimentacao) => ({
+        const mov = data.map((item: Movimentacao) => ({
           ...item,
           preco: new Intl.NumberFormat('pt-BR', {
             style: 'currency',
@@ -43,13 +42,12 @@ const OrderGenerator: React.FC = () => {
             second: '2-digit'
           })
         }));
-        setMovimentacao(formattedData);
+        setMovimentacao(mov);
+      } else {
+        message.error('Erro ao carregar movimentações', 3);
       }
     } catch (error) {
-      messageApi.error({
-        content: 'Erro ao carregar exposições',
-        duration: 3
-      });
+      message.error('Erro ao carregar movimentações', 3);
     }
   };
 
@@ -59,11 +57,7 @@ const OrderGenerator: React.FC = () => {
 
   const onFinish = async (values: OrderFormValues) => {
     setSubmitting(true);
-    messageApi.info({
-      type: 'info',
-      content: 'Processando ordem',
-      duration: 1.8
-    })
+    message.info('Processando ordem', 1.8);
     try {
       const response = await fetch(`${base_url}/Order/processar/ordem-ativo`, {
         method: 'POST',
@@ -72,34 +66,23 @@ const OrderGenerator: React.FC = () => {
         },
         body: JSON.stringify(values),
       });
+
       const data = await response.json();
 
-      if (!response.ok) {
+      if (data.sucesso === false) {
         setTimeout(function () {
-          messageApi.error({
-            type: 'error',
-            content: `${data.msg_erro}`,
-            duration: 8
-          });
+          message.error(`${data.msg_erro}`, 8);
         }, 2000)
       } else {
         setTimeout(function () {
-          messageApi.open({
-            type: 'success',
-            content: 'Ordem processado com sucesso',
-            duration: 4
-          });
+          message.success('Ordem processado com sucesso', 4);
         }, 1000)
         form.resetFields();
         await fetchExposicoes();
       }
     }
     catch (error: any) {
-      messageApi.open({
-        type: 'error',
-        content: 'Houve um erro ao tentar processar sua ordem',
-        duration: 8
-      });
+      message.error('Houve um erro ao tentar processar sua ordem', 8);
     }
     finally {
       setSubmitting(false);
@@ -116,7 +99,6 @@ const OrderGenerator: React.FC = () => {
         onFinish={onFinish}
         initialValues={{ lado: 'C' }}
       >
-        {contextHolder}
         {/* Campo Ativo  */}
         <Form.Item
           name="ativo"
@@ -124,9 +106,9 @@ const OrderGenerator: React.FC = () => {
           rules={[{ required: true, message: 'Por favor, selecione o ativo!' }]}
         >
           <Select placeholder="Selecione um ativo">
-            {assetOptions.map(asset => (
-              <Option key={asset} value={asset}>
-                {asset}
+            {ativoOptions.map(ativo => (
+              <Option key={ativo} value={ativo}>
+                {ativo}
               </Option>
             ))}
           </Select>
@@ -191,7 +173,6 @@ const OrderGenerator: React.FC = () => {
               // Primeiro substitui vírgula por ponto, depois remove $ e espaços
               return value.replace(',', '.').replace(/\$\s?|(,*)/g, '') as unknown as number;
             }}
-            addonBefore="$"
           />
         </Form.Item>
 

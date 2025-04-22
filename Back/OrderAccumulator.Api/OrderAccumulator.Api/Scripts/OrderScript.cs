@@ -32,7 +32,7 @@
             WHERE 
                 RANKING = 1
             ORDER BY 
-                ATIVO";
+                DATA_CRIACAO DESC";
 
         public string ObterTodasOrdens = @"
             SELECT 
@@ -56,8 +56,8 @@
             ORDER BY DATA_CRIACAO DESC";
 
         public string InserirOrdem = @"
-            INSERT INTO ORDERS (ATIVO, LADO, QUANTIDADE, PRECO, EXPOSICAO_ATUAL, ORDEM_STATUS, MOTIVO)
-            VALUES (@ATIVO, @LADO, @QUANTIDADE, @PRECO, @EXPOSICAO_ATUAL, @ORDEM_STATUS, @MOTIVO)";
+            INSERT INTO ORDERS (ATIVO, LADO, QUANTIDADE, PRECO, EXPOSICAO_ATUAL, ORDEM_STATUS, MOTIVO, DATA_CRIACAO)
+            VALUES (@ATIVO, @LADO, @QUANTIDADE, @PRECO, @EXPOSICAO_ATUAL, @ORDEM_STATUS, @MOTIVO, @DATA)";
 
         public string LimpaTabela = @"DELETE FROM ORDERS"; 
     }

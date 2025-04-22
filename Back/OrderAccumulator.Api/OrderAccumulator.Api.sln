@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderAccumulator.Api", "OrderAccumulator.Api\OrderAccumulator.Api.csproj", "{5D059CEF-58B6-4521-A104-89A5D4F807B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderAccumulator.Tests", "OrderAccumulator.Tests\OrderAccumulator.Tests.csproj", "{C87CAEF1-A6C8-4F31-9149-4A8AEC01036A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5D059CEF-58B6-4521-A104-89A5D4F807B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D059CEF-58B6-4521-A104-89A5D4F807B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D059CEF-58B6-4521-A104-89A5D4F807B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C87CAEF1-A6C8-4F31-9149-4A8AEC01036A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C87CAEF1-A6C8-4F31-9149-4A8AEC01036A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C87CAEF1-A6C8-4F31-9149-4A8AEC01036A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C87CAEF1-A6C8-4F31-9149-4A8AEC01036A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -139,7 +139,7 @@ const MovimentacaoCard: React.FC<MovimentacaoCardProps> = ({ movimentacao, onDel
 
     const deletarButton = (
         <Popconfirm
-            title="Limpar tabela (Isso só acontece pois é um ambiente de aprendizado)"
+            title="Limpar tabela (Isso só acontece pois é um ambiente de dev)"
             description="Tem certeza que deseja deletar todas as movimentações?"
             onConfirm={handleDelete}
             okText="Sim"
