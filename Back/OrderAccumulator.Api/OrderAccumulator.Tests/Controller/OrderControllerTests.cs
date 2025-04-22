@@ -56,7 +56,7 @@ namespace OrderAccumulator.Tests.Controller
             // Arrange
             var ordem = new OrderModels
             {
-                Ativo = "INVALID",
+                Ativo = "TESTE",
                 Lado = 'X',
                 Quantidade = -1,
                 Preco = 0
