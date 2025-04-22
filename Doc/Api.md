@@ -12,26 +12,32 @@ API para gerenciamento e processamento de ordens de compra e venda de ativos fin
 Processa ordens de compra e venda de ativos financeiros.
 
 **Request:**
+```json
 {   
     "ativo": "string",     // PETR4, VALE3 ou VIIA4 
     "lado": "char",        // C (Compra) ou V (Venda) 
     "quantidade": "int",   // Quantidade de ativos 
     "preco": "decimal"     // Preço unitário do ativo 
 }
+```
 
 **Response (200 OK):**
+```json
 { 
     "sucesso": true, 
     "exposicao_atual": 0.0, 
     "msg_erro": null 
 }
+```
 
 **Response (200 OK):**
+```json
 { 
     "sucesso": false, 
     "exposicao_atual": 0.0, 
     "msg_erro": "Ordem rejeitada - Não é possível realizar ..." 
 }
+```
 **OBS**: *Quando a operação retorna false por motivos de regra de negócio (Atingiu o limite ou não tem saldo no ativo selecionado)*
 
 **Regras de Negócio:**
@@ -51,6 +57,7 @@ Processa ordens de compra e venda de ativos financeiros.
 Retorna todo o histórico de ordens processadas.
 
 **Response (200 OK):**
+```json
 [{ 
     "ativo": "string", 
     "lado": "string", 
@@ -61,6 +68,7 @@ Retorna todo o histórico de ordens processadas.
     "status": 0, 
     "motivo": "string" 
 }]
+```
 
 **Response (204 No Content):**  
 Retornado quando não existem registros.
@@ -72,6 +80,7 @@ Retornado quando não existem registros.
 Retorna a última ordem processada para cada ativo.
 
 **Response (200 OK):**
+```json
 [{ 
     "ativo": "string", 
     "lado": "string", 
@@ -82,6 +91,7 @@ Retorna a última ordem processada para cada ativo.
     "status": 0, 
     "motivo": "string" 
 }]
+```
 
 **Response (204 No Content):**  
 Retornado quando não existem registros.
@@ -107,6 +117,7 @@ Remove todos os registros do histórico de ordens (*Essa rota existe apenas para
 ## Modelos de Dados
 
 ### OrderModels
+```csharp
 public class OrderModels 
 { 
     public string Ativo { get; set; }      // PETR4, VALE3, VIIA4 
@@ -114,16 +125,19 @@ public class OrderModels
     public int Quantidade { get; set; } 
     public decimal Preco { get; set; } 
 }
-
+```
 ### OrderResponse
+```csharp
 public class OrderResponse
 {
     public bool Sucesso { get; set; }
     public decimal Exposicao_Atual { get; set; }
     public string? Msg_Erro { get; set; }
 }
+```
 
 ### MovimentacoesResponse
+```csharp
 public class MovimentacoesResponse
 { 
     public string Ativo { get; set; } 
@@ -135,6 +149,7 @@ public class MovimentacoesResponse
     public int OrdemStatus { get; set; }            // 0=rejeitado, 1=aceito 
     public string? Motivo { get; set; } 
 }
+```
 
 ## Banco de Dados
 A API utiliza uma tabela `ORDERS` para persistência dos dados com os seguintes campos:
@@ -146,3 +161,19 @@ A API utiliza uma tabela `ORDERS` para persistência dos dados com os seguintes 
 - ORDEM_STATUS
 - MOTIVO
 - DATA_CRIACAO
+
+*OBS:* **Caso o banco de dados não exista, utilizar o script abaixo para cria-lo**
+
+```sql
+CREATE TABLE ORDERS (
+    ID INT IDENTITY(1,1) PRIMARY KEY,
+    ATIVO NVARCHAR(50) NOT NULL,
+    LADO CHAR(1) NOT NULL, -- 'C' PARA COMPRA, 'V' PARA VENDA
+    QUANTIDADE INT NOT NULL,
+    PRECO DECIMAL(18, 2) NOT NULL,
+    EXPOSICAO_ATUAL DECIMAL(18, 2)NOT NULL,
+	ORDEM_STATUS BIT NOT NULL DEFAULT 1,
+	MOTIVO NVARCHAR(50) NULL,
+	DATA_CRIACAO DATETIME NOT NULL
+);
+```
