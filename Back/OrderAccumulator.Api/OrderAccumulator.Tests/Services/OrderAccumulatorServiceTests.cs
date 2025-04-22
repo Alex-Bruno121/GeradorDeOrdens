@@ -49,7 +49,27 @@ namespace OrderAccumulator.Tests.Services
 
             // Assert
             Assert.False(resultado.Sucesso);
-            Assert.Equal("Ativo não pode ser vazio", resultado.Msg_Erro);
+            Assert.Equal("Ativo não pode ser vazio ou ser diferente dos ativos: PETR4, VALE3, VIIA4", resultado.Msg_Erro);
+        }
+
+        [Fact]
+        public async Task ProcessarOrdemAsync_QuandoAtivoErrado_DeveRetornarErro()
+        {
+            // Arrange
+            var ordem = new OrderModels
+            {
+                Ativo = "PETR4z",
+                Lado = 'C',
+                Quantidade = 100,
+                Preco = 28.50m
+            };
+
+            // Act
+            var resultado = await _service.ProcessarOrdemAsync(ordem);
+
+            // Assert
+            Assert.False(resultado.Sucesso);
+            Assert.Equal("Ativo não pode ser vazio ou ser diferente dos ativos: PETR4, VALE3, VIIA4", resultado.Msg_Erro);
         }
 
         [Fact]

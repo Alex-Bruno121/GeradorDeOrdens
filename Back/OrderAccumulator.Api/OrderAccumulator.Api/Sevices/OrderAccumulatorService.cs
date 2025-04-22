@@ -21,7 +21,7 @@ namespace OrderAccumulator.Api.Services
             {
                 if (order == null) return new OrderResponse { Sucesso = false, Msg_Erro = "Ordem não pode ser nula" };
 
-                if (string.IsNullOrWhiteSpace(order.Ativo)) return new OrderResponse { Sucesso = false, Msg_Erro = "Ativo não pode ser vazio" };
+                if (string.IsNullOrEmpty(order.Ativo) || !(order.Ativo == "PETR4" || order.Ativo == "VALE3" || order.Ativo == "VIIA4")) return new OrderResponse { Sucesso = false, Msg_Erro = "Ativo não pode ser vazio ou ser diferente dos ativos: PETR4, VALE3, VIIA4" };
 
                 if (order.Lado != 'C' && order.Lado != 'V') return new OrderResponse { Sucesso = false, Msg_Erro = "Lado da ordem deve ser 'C' para compra ou 'V' para venda" };
 
