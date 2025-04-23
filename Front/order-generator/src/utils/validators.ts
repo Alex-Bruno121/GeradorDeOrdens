@@ -13,7 +13,7 @@ export const orderValidators = {
         const rounded = Math.round(value * 100);
         const original = value * 100;
         if (Math.abs(rounded - original) > 0.0000001)
-            return Promise.reject('O preço deve ser múltiplo de 0.01');
+            return Promise.reject('O preço deve ter apenas 2 casas decimais');
 
         return Promise.resolve();
     }
