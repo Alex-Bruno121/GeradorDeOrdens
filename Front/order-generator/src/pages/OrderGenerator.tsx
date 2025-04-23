@@ -167,10 +167,8 @@ const OrderGenerator: React.FC = () => {
             style={{ width: '100%' }}
             placeholder="0.01"
             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            // parser={(value) => value?.replace(/\$\s?|(,*)/g, '') as unknown as number}
             parser={(value) => {
               if (!value) return 0;
-              // Primeiro substitui vírgula por ponto, depois remove $ e espaços
               return value.replace(',', '.').replace(/\$\s?|(,*)/g, '') as unknown as number;
             }}
           />
