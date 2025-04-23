@@ -127,7 +127,8 @@ namespace OrderAccumulator.Tests.Services
             _repositoryMock.Setup(r => r.BuscaUltimaExposicaoPorAtivoAsync(It.IsAny<OrderModels>()))
                           .ReturnsAsync(0m);
 
-            _repositoryMock.Setup(r => r.InserirOrdemAsync(It.IsAny<OrderModels>(), It.IsAny<decimal>(), It.IsAny<int>(), It.IsAny<string>()));
+            _repositoryMock.Setup(r => r.InserirOrdemAsync(It.IsAny<OrderModels>(), It.IsAny<decimal>(), It.IsAny<int>(), It.IsAny<string>()))
+                          .ReturnsAsync(1);
 
             // Act
             var resultado = await _service.ProcessarOrdemAsync(ordem);
