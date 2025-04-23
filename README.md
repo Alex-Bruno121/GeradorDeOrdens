@@ -28,13 +28,9 @@ Este projeto consiste em uma API back-end para gerenciamento de pedidos e uma in
 
 ### Como Executar
 1. Navegue até o diretório `Back/OrderAccumulator.Api`
-2. Execute os seguintes comandos:
-
-```sh
-dotnet restore
-dotnet build
-dotnet run
-```
+2. Abra a solução do projeto
+3. Build a aplicação
+4. Execute o projeto.
 
 A API iniciará em https://localhost:7019
 
@@ -52,7 +48,8 @@ A API iniciará em https://localhost:7019
 
 ### Como Executar
 1. Navegue até o diretório Front/order-generator
-2. Instale as dependências:
+2. Utilizar o nodejs na versão 22
+3. Instale as dependências:
 
 ```sh
 npm install
