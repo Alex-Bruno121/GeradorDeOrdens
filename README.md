@@ -48,7 +48,7 @@ A API iniciará em https://localhost:7019
 
 ### Como Executar
 1. Navegue até o diretório Front/order-generator
-2. Utilizar o nodejs na versão 22
+2. Utilizar o nodejs na versão 22.14.0
 3. Instale as dependências:
 
 ```sh
