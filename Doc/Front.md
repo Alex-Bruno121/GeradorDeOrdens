@@ -27,8 +27,8 @@ O Order Generator é uma aplicação React/TypeScript desenvolvida para gerencia
 #### 4. Campo de Preço
 - **Tipo**: Input numérico
 - **Restrições**:
-  - Valor mínimo: 0,01
-  - Valor máximo: 999,99
+  - Valor mínimo: 0.01
+  - Valor máximo: 999.99
   - Até 2 casas decimais
 
 ### Card de Movimentações
